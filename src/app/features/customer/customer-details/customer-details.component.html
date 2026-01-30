@@ -1,0 +1,192 @@
+<div class="back-navigation">
+  <div class="nav-container">
+    <p-button
+      label="Back to Dashboard"
+      icon="pi pi-arrow-left"
+      severity="secondary"
+      [outlined]="true"
+      size="small"
+      (onClick)="goBack()"
+      styleClass="back-btn"
+    />
+  </div>
+</div>
+
+<main class="customer-main">
+  <div class="customer-container">
+    @if (loading()) {
+      <div class="loading-container">
+        <div class="loading-spinner">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+        <p>Loading customer data...</p>
+      </div>
+    } @else if (customer()) {
+      <header class="profile-header fade-in">
+        <div class="profile-avatar">
+          <i class="pi pi-user"></i>
+        </div>
+        <div class="profile-info">
+          <h1>{{ customer()!.name }}</h1>
+          <div class="profile-meta">
+            <span class="meta-item">
+              <i class="pi pi-id-card"></i>
+              {{ customer()!.CIF }}
+            </span>
+            <span class="meta-item">
+              <p-tag 
+                [value]="customer()!.segment" 
+                [severity]="customer()!.segment === 'VIP' ? 'danger' : customer()!.segment === 'Priority' ? 'warn' : 'info'" 
+                styleClass="segment-tag"
+              />
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <div class="content-grid">
+        <section class="details-card slide-up">
+          <div class="card-header">
+            <h2>
+              <i class="pi pi-user-edit"></i>
+              Personal Information
+            </h2>
+          </div>
+          <div class="card-content">
+            <div class="info-grid">
+              <div class="info-item">
+                <div class="info-icon">
+                  <i class="pi pi-envelope"></i>
+                </div>
+                <div class="info-content">
+                  <label>Email Address</label>
+                  <p>{{ customer()!.email }}</p>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="info-icon">
+                  <i class="pi pi-phone"></i>
+                </div>
+                <div class="info-content">
+                  <label>Phone Number</label>
+                  <p>{{ customer()!.phone }}</p>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="info-icon">
+                  <i class="pi pi-id-card"></i>
+                </div>
+                <div class="info-content">
+                  <label>National ID</label>
+                  <p>{{ customer()!.nationalId }}</p>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="info-icon status-icon">
+                  <i class="pi pi-verified"></i>
+                </div>
+                <div class="info-content">
+                  <label>Account Status</label>
+                  <p class="status-active">Verified Customer</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="summary-card slide-up">
+          <div class="card-header">
+            <h2>
+              <i class="pi pi-wallet"></i>
+              Portfolio Summary
+            </h2>
+          </div>
+          <div class="card-content">
+            <div class="balance-display">
+              <span class="balance-label">Total Balance</span>
+              <span class="balance-value">{{ totalBalance() | number: '1.2-2' }}</span>
+              <span class="balance-currency">EGP</span>
+            </div>
+            <div class="summary-stats">
+              <div class="stat-item">
+                <span class="stat-value">{{ accounts().length }}</span>
+                <span class="stat-label">Total Accounts</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">{{ activeAccountsCount() }}</span>
+                <span class="stat-label">Active Accounts</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="accounts-section slide-up">
+        <div class="section-card">
+          <div class="card-header">
+            <div class="header-left">
+              <h2>
+                <i class="pi pi-credit-card"></i>
+                Accounts
+              </h2>
+              <span class="account-count">{{ accounts().length }} accounts</span>
+            </div>
+          </div>
+
+          @if (accounts().length > 0) {
+            <div class="accounts-grid">
+              @for (account of accounts(); track account.id) {
+                <div class="account-card">
+                  <div class="account-header">
+                    <div class="account-type-icon" [class]="'type-' + account.type.toLowerCase()">
+                      <i class="pi {{ getAccountTypeIcon(account.type) }}"></i>
+                    </div>
+                    <div class="account-type-info">
+                      <span class="account-type">{{ account.type }} Account</span>
+                      <span class="account-id">{{ account.id }}</span>
+                    </div>
+                    <p-tag
+                      [value]="account.status"
+                      [severity]="getStatusSeverity(account.status)"
+                      styleClass="status-badge"
+                    />
+                  </div>
+                  <div class="account-body">
+                    <div class="account-balance">
+                      <span class="balance-label">Current Balance</span>
+                      <span class="balance-amount">
+                        {{ account.balance | number: '1.2-2' }}
+                        <span class="currency">{{ account.currency }}</span>
+                      </span>
+                    </div>
+                    <div class="account-iban">
+                      <span class="iban-label">IBAN</span>
+                      <span class="iban-value">{{ account.iban }}</span>
+                    </div>
+                  </div>
+                  <div class="account-footer">
+                    <p-button
+                      label="View Transactions"
+                      icon="pi pi-arrow-right"
+                      iconPos="right"
+                      styleClass="view-transactions-btn"
+                      (onClick)="viewTransactions(account)"
+                    />
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="empty-state">
+              <div class="empty-icon">
+                <i class="pi pi-inbox"></i>
+              </div>
+              <h3>No Accounts Found</h3>
+              <p>This customer doesn't have any accounts yet.</p>
+            </div>
+          }
+        </div>
+      </section>
+    }
+  </div>
+</main>

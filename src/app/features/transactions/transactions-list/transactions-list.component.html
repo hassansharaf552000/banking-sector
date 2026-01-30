@@ -1,0 +1,524 @@
+<div class="back-navigation">
+  <div class="nav-container">
+    <p-button
+      label="Back to Customer"
+      icon="pi pi-arrow-left"
+      severity="secondary"
+      [outlined]="true"
+      size="small"
+      (onClick)="goBack()"
+      styleClass="back-btn"
+    />
+  </div>
+</div>
+
+<main class="transactions-main">
+  <p-toast />
+  
+  <div class="transactions-container">
+    @if (loading()) {
+      <div class="loading-container">
+        <div class="loading-spinner">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+        <p>Loading transactions...</p>
+      </div>
+    } @else if (account()) {
+      <header class="account-header fade-in">
+        <div class="account-info-left">
+          <div class="account-type-badge">
+            <i class="pi pi-wallet"></i>
+            <span>{{ account()!.type }} Account</span>
+          </div>
+          <h1 class="account-id">{{ account()!.id }}</h1>
+          <p class="account-iban">{{ account()!.iban }}</p>
+        </div>
+        <div class="account-balance-display">
+          <span class="balance-label">Current Balance</span>
+          <span class="balance-value">{{ account()!.balance | number: '1.2-2' }}</span>
+          <span class="balance-currency">{{ account()!.currency }}</span>
+        </div>
+      </header>
+
+      <section class="insights-section slide-up">
+        <div class="section-card">
+          <div class="card-header">
+            <h2>
+              <i class="pi pi-chart-line"></i>
+              Monthly Overview
+            </h2>
+          </div>
+          <div class="insights-grid">
+            <div class="insight-card debit">
+              <div class="insight-icon">
+                <i class="pi pi-arrow-down-left"></i>
+              </div>
+              <div class="insight-content">
+                <span class="insight-label">Total Debit</span>
+                <span class="insight-value">{{ monthlyInsights().totalDebit | number: '1.2-2' }}</span>
+                <span class="insight-currency">EGP</span>
+              </div>
+            </div>
+            <div class="insight-card credit">
+              <div class="insight-icon">
+                <i class="pi pi-arrow-up-right"></i>
+              </div>
+              <div class="insight-content">
+                <span class="insight-label">Total Credit</span>
+                <span class="insight-value">{{ monthlyInsights().totalCredit | number: '1.2-2' }}</span>
+                <span class="insight-currency">EGP</span>
+              </div>
+            </div>
+            <div class="insight-card category">
+              <div class="insight-icon">
+                <i class="pi pi-tag"></i>
+              </div>
+              <div class="insight-content">
+                <span class="insight-label">Top Spending</span>
+                <span class="insight-value">{{ monthlyInsights().highestCategory || 'N/A' }}</span>
+                @if (monthlyInsights().highestCategory) {
+                  <span class="insight-sub">{{ monthlyInsights().highestAmount | number: '1.2-2' }} EGP</span>
+                }
+              </div>
+            </div>
+            <div class="insight-card count">
+              <div class="insight-icon">
+                <i class="pi pi-list"></i>
+              </div>
+              <div class="insight-content">
+                <span class="insight-label">Transactions</span>
+                <span class="insight-value">{{ monthlyInsights().transactionCount }}</span>
+                <span class="insight-sub">This month</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="filters-section slide-up">
+        <div class="section-card">
+          <div class="card-header">
+            <h2>
+              <i class="pi pi-filter"></i>
+              Filters & Actions
+            </h2>
+          </div>
+          <div class="filters-content">
+            <form [formGroup]="filterForm" class="filters-form">
+              <div class="filter-group">
+                <label>
+                  <i class="pi pi-calendar"></i>
+                  From Date
+                </label>
+                <p-datepicker 
+                  formControlName="dateFrom" 
+                  [showIcon]="true" 
+                  dateFormat="yy-mm-dd"
+                  placeholder="Start date"
+                  styleClass="filter-datepicker"
+                  appendTo="body"
+                />
+              </div>
+              <div class="filter-group">
+                <label>
+                  <i class="pi pi-calendar"></i>
+                  To Date
+                </label>
+                <p-datepicker 
+                  formControlName="dateTo" 
+                  [showIcon]="true" 
+                  dateFormat="yy-mm-dd"
+                  placeholder="End date"
+                  styleClass="filter-datepicker"
+                  appendTo="body"
+                />
+              </div>
+              <div class="filter-group">
+                <label>
+                  <i class="pi pi-arrows-h"></i>
+                  Type
+                </label>
+                <p-select
+                  formControlName="type"
+                  [options]="transactionTypes()"
+                  optionLabel="label"
+                  optionValue="code"
+                  placeholder="All Types"
+                  [showClear]="true"
+                  styleClass="filter-select"
+                />
+              </div>
+              <div class="filter-group">
+                <label>
+                  <i class="pi pi-tag"></i>
+                  Category
+                </label>
+                <p-select
+                  formControlName="category"
+                  [options]="categories()"
+                  placeholder="All Categories"
+                  [showClear]="true"
+                  styleClass="filter-select"
+                />
+              </div>
+            </form>
+            <div class="actions-bar">
+              <div class="actions-left">
+                <p-button
+                  label="Clear Filters"
+                  icon="pi pi-filter-slash"
+                  severity="secondary"
+                  [outlined]="true"
+                  (onClick)="clearFilters()"
+                  styleClass="action-btn"
+                />
+              </div>
+              <div class="actions-right">
+                <p-button
+                  label="Mini Statement"
+                  icon="pi pi-file-pdf"
+                  severity="info"
+                  [outlined]="true"
+                  (onClick)="showMiniStatement.set(true)"
+                  styleClass="action-btn"
+                />
+                <p-button
+                  label="Export CSV"
+                  icon="pi pi-download"
+                  severity="secondary"
+                  [outlined]="true"
+                  (onClick)="exportToCSV()"
+                  styleClass="action-btn"
+                />
+                <p-button
+                  label="New Transaction"
+                  icon="pi pi-plus"
+                  (onClick)="openNewTransactionDialog()"
+                  styleClass="primary-action-btn"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="transactions-table-section slide-up">
+        <div class="section-card">
+          <div class="card-header">
+            <div class="header-left">
+              <h2>
+                <i class="pi pi-list"></i>
+                Transactions
+              </h2>
+              <span class="record-count">{{ filteredTransactions().length }} records</span>
+            </div>
+            <div class="sort-controls">
+              <span class="sort-label">Sort by:</span>
+              <div class="sort-buttons">
+                <button 
+                  class="sort-btn" 
+                  (click)="sortByDate('desc')"
+                  [class.active]="currentSort === 'date-desc'"
+                >
+                  <i class="pi pi-calendar"></i> Latest
+                </button>
+                <button 
+                  class="sort-btn" 
+                  (click)="sortByDate('asc')"
+                  [class.active]="currentSort === 'date-asc'"
+                >
+                  <i class="pi pi-calendar"></i> Oldest
+                </button>
+                <button 
+                  class="sort-btn" 
+                  (click)="sortByAmount('desc')"
+                  [class.active]="currentSort === 'amount-desc'"
+                >
+                  <i class="pi pi-sort-amount-down"></i> Highest
+                </button>
+                <button 
+                  class="sort-btn" 
+                  (click)="sortByAmount('asc')"
+                  [class.active]="currentSort === 'amount-asc'"
+                >
+                  <i class="pi pi-sort-amount-up"></i> Lowest
+                </button>
+              </div>
+            </div>
+          </div>
+
+          @if (filteredTransactions().length > 0) {
+            <div class="table-wrapper">
+              <p-table
+                [value]="filteredTransactions()"
+                [paginator]="true"
+                [rows]="10"
+                [rowsPerPageOptions]="[5, 10, 20, 50]"
+                [tableStyle]="{ 'min-width': '60rem' }"
+                styleClass="modern-table"
+                [rowHover]="true"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th style="width: 10%">
+                      <div class="th-content">ID</div>
+                    </th>
+                    <th style="width: 15%">
+                      <div class="th-content">Date</div>
+                    </th>
+                    <th style="width: 12%">
+                      <div class="th-content">Type</div>
+                    </th>
+                    <th style="width: 18%">
+                      <div class="th-content">Amount</div>
+                    </th>
+                    <th style="width: 25%">
+                      <div class="th-content">Merchant</div>
+                    </th>
+                    <th style="width: 20%">
+                      <div class="th-content">Category</div>
+                    </th>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-transaction>
+                  <tr class="transaction-row">
+                    <td>
+                      <span class="transaction-id">{{ transaction.id }}</span>
+                    </td>
+                    <td>
+                      <span class="transaction-date">{{ transaction.date }}</span>
+                    </td>
+                    <td>
+                      <div class="type-indicator" [class]="transaction.type.toLowerCase()">
+                        <i class="pi" [class.pi-arrow-down-left]="transaction.type === 'Debit'" [class.pi-arrow-up-right]="transaction.type === 'Credit'"></i>
+                        <span>{{ transaction.type }}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="amount" [class]="transaction.type.toLowerCase()">
+                        {{ transaction.type === 'Debit' ? '-' : '+' }}{{ transaction.amount | number: '1.2-2' }}
+                        <span class="currency">EGP</span>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="merchant-name">{{ transaction.merchant }}</span>
+                    </td>
+                    <td>
+                      <span class="category-badge">{{ transaction.category }}</span>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          } @else {
+            <div class="empty-state">
+              <div class="empty-icon">
+                <i class="pi pi-inbox"></i>
+              </div>
+              <h3>No Transactions Found</h3>
+              <p>Try adjusting your filters or add a new transaction.</p>
+            </div>
+          }
+        </div>
+      </section>
+    }
+  </div>
+
+  <p-dialog
+    header="Create New Transaction"
+    [(visible)]="showDialog"
+    [modal]="true"
+    [style]="{ width: '480px' }"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="modern-dialog"
+  >
+    <form [formGroup]="transactionForm" (ngSubmit)="onSubmitTransaction()">
+      <div class="dialog-form">
+        <div class="form-group">
+          <label for="type">
+            <i class="pi pi-arrows-h"></i>
+            Transaction Type
+          </label>
+          <p-select
+            id="type"
+            formControlName="type"
+            [options]="transactionTypes()"
+            optionLabel="label"
+            optionValue="code"
+            styleClass="w-full"
+          />
+          @if (typeControl?.invalid && typeControl?.touched) {
+            <span class="field-error">Transaction type is required</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="amount">
+            <i class="pi pi-money-bill"></i>
+            Amount (EGP)
+          </label>
+          <p-inputNumber
+            id="amount"
+            formControlName="amount"
+            mode="decimal"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+          />
+          @if (amountControl?.invalid && amountControl?.touched) {
+            <span class="field-error">
+              @if (amountControl?.errors?.['required']) {
+                Amount is required
+              } @else if (amountControl?.errors?.['minAmount']) {
+                Amount must be greater than 0
+              } @else if (amountControl?.errors?.['maxAmount']) {
+                Amount cannot exceed 100,000
+              } @else if (amountControl?.errors?.['maxDecimalPlaces']) {
+                Maximum 2 decimal places allowed
+              } @else if (amountControl?.errors?.['insufficientBalance']) {
+                Insufficient balance (Available: {{ account()!.balance | number: '1.2-2' }})
+              }
+            </span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="date">
+            <i class="pi pi-calendar"></i>
+            Date
+          </label>
+          <p-datepicker
+            id="date"
+            formControlName="date"
+            [showIcon]="true"
+            dateFormat="yy-mm-dd"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+            appendTo="body"
+          />
+          @if (dateControl?.invalid && dateControl?.touched) {
+            <span class="field-error">
+              @if (dateControl?.errors?.['required']) {
+                Date is required
+              } @else if (dateControl?.errors?.['futureDate']) {
+                Date cannot be in the future
+              }
+            </span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="merchant">
+            <i class="pi pi-shopping-bag"></i>
+            Merchant
+          </label>
+          <input
+            pInputText
+            id="merchant"
+            formControlName="merchant"
+            placeholder="Enter merchant name"
+            class="w-full"
+          />
+          @if (merchantControl?.invalid && merchantControl?.touched) {
+            <span class="field-error">
+              @if (merchantControl?.errors?.['required']) {
+                Merchant is required
+              } @else if (merchantControl?.errors?.['minLength']) {
+                Merchant must be at least 3 characters
+              } @else if (merchantControl?.errors?.['maxLength']) {
+                Merchant cannot exceed 50 characters
+              }
+            </span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="category">
+            <i class="pi pi-tag"></i>
+            Category
+          </label>
+          <p-select
+            id="category"
+            formControlName="category"
+            [options]="categories()"
+            placeholder="Select category"
+            styleClass="w-full"
+          />
+          @if (categoryControl?.invalid && categoryControl?.touched) {
+            <span class="field-error">Category is required</span>
+          }
+        </div>
+      </div>
+
+      <div class="dialog-footer">
+        <p-button
+          label="Cancel"
+          severity="secondary"
+          [outlined]="true"
+          (onClick)="closeDialog()"
+          type="button"
+        />
+        <p-button 
+          label="Create Transaction" 
+          type="submit"
+          icon="pi pi-check"
+        />
+      </div>
+    </form>
+  </p-dialog>
+
+  <p-dialog
+    header="Mini Statement"
+    [(visible)]="showMiniStatement"
+    [modal]="true"
+    [style]="{ width: '700px' }"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="modern-dialog"
+  >
+    <div class="mini-statement">
+      <div class="statement-header">
+        <div class="statement-account">
+          <span class="account-label">Account</span>
+          <span class="account-value">{{ account()?.id }}</span>
+        </div>
+        <div class="statement-date">
+          <span class="date-label">Generated</span>
+          <span class="date-value">{{ currentDate | date: 'medium' }}</span>
+        </div>
+      </div>
+      <p class="statement-subtitle">Last {{ miniStatementCount }} transactions</p>
+      <div class="statement-table">
+        <p-table [value]="miniStatementTransactions()" styleClass="p-datatable-sm">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Merchant</th>
+              <th>Amount</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-txn>
+            <tr>
+              <td>{{ txn.date }}</td>
+              <td>
+                <div class="type-indicator small" [class]="txn.type.toLowerCase()">
+                  <span>{{ txn.type }}</span>
+                </div>
+              </td>
+              <td>{{ txn.merchant }}</td>
+              <td>
+                <span class="amount" [class]="txn.type.toLowerCase()">
+                  {{ txn.type === 'Debit' ? '-' : '+' }}{{ txn.amount | number: '1.2-2' }}
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-dialog>
+</main>

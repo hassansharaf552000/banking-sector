@@ -1,0 +1,176 @@
+<main class="dashboard-main">
+  <div class="dashboard-container">
+    <header class="page-header fade-in">
+      <div class="header-content">
+        <div class="header-text">
+          <h1>Customer Management</h1>
+          <p>View and manage your banking customers</p>
+        </div>
+        <div class="header-stats">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="pi pi-users"></i>
+            </div>
+            <div class="stat-content">
+              <span class="stat-value">{{ customers().length }}</span>
+              <span class="stat-label">Total Customers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="customers-section slide-up">
+      <div class="section-card">
+        <div class="card-header">
+          <div class="header-left">
+            <h2>
+              <i class="pi pi-users"></i>
+              Customers
+            </h2>
+            <span class="customer-count">{{ customers().length }} records</span>
+          </div>
+          <div class="header-right">
+            <div class="search-wrapper">
+              <i class="pi pi-search search-icon"></i>
+              <input
+                pInputText
+                type="text"
+                #searchInput
+                (input)="dt.filterGlobal(searchInput.value, 'contains'); searchValue.set(searchInput.value)"
+                placeholder="Search by name, email, ID..."
+                class="search-input"
+              />
+              @if (searchValue()) {
+                <button class="clear-search" (click)="clear(dt); searchInput.value = ''">
+                  <i class="pi pi-times"></i>
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <p-table
+            #dt
+            [value]="customers()"
+            [loading]="loading()"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[5, 10, 20]"
+            [globalFilterFields]="['name', 'email', 'CIF', 'segment', 'phone']"
+            [tableStyle]="{ 'min-width': '60rem' }"
+            styleClass="modern-table"
+            [rowHover]="true"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th pSortableColumn="CIF" style="width: 12%">
+                  <div class="th-content">
+                    Customer ID
+                    <p-sortIcon field="CIF" />
+                  </div>
+                </th>
+                <th pSortableColumn="name" style="width: 22%">
+                  <div class="th-content">
+                    Customer Name
+                    <p-sortIcon field="name" />
+                  </div>
+                </th>
+                <th pSortableColumn="email" style="width: 22%">
+                  <div class="th-content">
+                    Email Address
+                    <p-sortIcon field="email" />
+                  </div>
+                </th>
+                <th pSortableColumn="phone" style="width: 14%">
+                  <div class="th-content">
+                    Phone
+                    <p-sortIcon field="phone" />
+                  </div>
+                </th>
+                <th pSortableColumn="segment" style="width: 12%">
+                  <div class="th-content">
+                    Segment
+                    <p-sortIcon field="segment" />
+                  </div>
+                </th>
+                <th style="width: 18%">
+                  <div class="th-content">Actions</div>
+                </th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-customer>
+              <tr class="customer-row">
+                <td>
+                  <span class="customer-id">{{ customer.CIF }}</span>
+                </td>
+                <td>
+                  <div class="customer-name-cell">
+                    <div class="avatar-circle">
+                      {{ customer.name.charAt(0) }}
+                    </div>
+                    <span class="customer-name">{{ customer.name }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="customer-email">{{ customer.email }}</span>
+                </td>
+                <td>
+                  <span class="customer-phone">{{ customer.phone }}</span>
+                </td>
+                <td>
+                  <span
+                    class="segment-badge"
+                    [class.segment-vip]="customer.segment === 'VIP'"
+                    [class.segment-priority]="customer.segment === 'Priority'"
+                    [class.segment-retail]="customer.segment === 'Retail'"
+                  >
+                    {{ customer.segment }}
+                  </span>
+                </td>
+                <td>
+                  <p-button
+                    label="View Details"
+                    icon="pi pi-arrow-right"
+                    iconPos="right"
+                    size="small"
+                    [rounded]="true"
+                    (onClick)="viewCustomer(customer)"
+                    styleClass="view-btn"
+                  />
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6">
+                  <div class="empty-state">
+                    <div class="empty-icon">
+                      <i class="pi pi-search"></i>
+                    </div>
+                    <h3>No customers found</h3>
+                    <p>Try adjusting your search criteria</p>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="loadingbody">
+              <tr>
+                <td colspan="6">
+                  <div class="loading-state">
+                    <i class="pi pi-spin pi-spinner"></i>
+                    <span>Loading customers...</span>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>

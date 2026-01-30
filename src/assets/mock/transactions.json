@@ -1,0 +1,92 @@
+[
+  {
+    "id": "T9001",
+    "accountId": "A1001",
+    "date": "2025-12-01",
+    "type": "Debit",
+    "amount": 250.75,
+    "merchant": "Carrefour",
+    "category": "Groceries"
+  },
+  {
+    "id": "T9002",
+    "accountId": "A1001",
+    "date": "2025-12-05",
+    "type": "Debit",
+    "amount": 1200.0,
+    "merchant": "Vodafone",
+    "category": "Bills"
+  },
+  {
+    "id": "T9003",
+    "accountId": "A1001",
+    "date": "2025-12-25",
+    "type": "Credit",
+    "amount": 8500.0,
+    "merchant": "Company Salary",
+    "category": "Income"
+  },
+  {
+    "id": "T9004",
+    "accountId": "A1001",
+    "date": "2026-01-10",
+    "type": "Debit",
+    "amount": 450.0,
+    "merchant": "Uber",
+    "category": "Transportation"
+  },
+  {
+    "id": "T9005",
+    "accountId": "A1001",
+    "date": "2026-01-15",
+    "type": "Debit",
+    "amount": 320.5,
+    "merchant": "Spinneys",
+    "category": "Groceries"
+  },
+  {
+    "id": "T9101",
+    "accountId": "A2001",
+    "date": "2025-12-10",
+    "type": "Debit",
+    "amount": 75.5,
+    "merchant": "Amazon",
+    "category": "Shopping"
+  },
+  {
+    "id": "T9102",
+    "accountId": "A2001",
+    "date": "2025-12-15",
+    "type": "Credit",
+    "amount": 5000.0,
+    "merchant": "Freelance Payment",
+    "category": "Income"
+  },
+  {
+    "id": "T9103",
+    "accountId": "A2001",
+    "date": "2026-01-05",
+    "type": "Debit",
+    "amount": 1500.0,
+    "merchant": "Etisalat",
+    "category": "Bills"
+  },
+  {
+    "id": "T9201",
+    "accountId": "A3001",
+    "date": "2026-01-12",
+    "type": "Debit",
+    "amount": 200.0,
+    "merchant": "Cinema",
+    "category": "Entertainment"
+  },
+  {
+    "id": "T9301",
+    "accountId": "A4001",
+    "date": "2026-01-20",
+    "type": "Credit",
+    "amount": 50000.0,
+    "merchant": "Business Revenue",
+    "category": "Income"
+  }
+]

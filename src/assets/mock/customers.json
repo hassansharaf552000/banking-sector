@@ -1,0 +1,34 @@
+[
+  {
+    "CIF": "C001",
+    "name": "Ahmed Ali",
+    "nationalId": "29810251234567",
+    "segment": "Retail",
+    "email": "ahmed.ali@mail.com",
+    "phone": "+201001234567"
+  },
+  {
+    "CIF": "C002",
+    "name": "Mona Hassan",
+    "nationalId": "29004151234568",
+    "segment": "Priority",
+    "email": "mona.hassan@mail.com",
+    "phone": "+201112345678"
+  },
+  {
+    "CIF": "C003",
+    "name": "Omar Mahmoud",
+    "nationalId": "29205101234569",
+    "segment": "Retail",
+    "email": "omar.mahmoud@mail.com",
+    "phone": "+201223456789"
+  },
+  {
+    "CIF": "C004",
+    "name": "Fatma Ibrahim",
+    "nationalId": "28912151234570",
+    "segment": "VIP",
+    "email": "fatma.ibrahim@mail.com",
+    "phone": "+201334567890"
+  }
+]
