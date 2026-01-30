@@ -6,10 +6,10 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
-import { Customer } from '../../core/models';
-import { CustomerService } from '../../core/services/customer.service';
-import { StateService } from '../../core/services/state.service';
-import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
+import { Customer } from '../../../../core/models';
+import { CustomerService } from '../../../customer/services/customer.service';
+import { StateService } from '../../../../core/services/state.service';
+import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
 
 
 @Component({

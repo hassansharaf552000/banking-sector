@@ -2,9 +2,9 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError, of } from 'rxjs';
-import { LoginCredentials, User, AuthResponse, RefreshTokenRequest } from '../models';
-import { SecureStorage } from '../utils/secure-storage.util';
-import { environment } from '../../../environments/environment';
+import { LoginCredentials, User, AuthResponse, RefreshTokenRequest } from '../../../core/models';
+import { SecureStorage } from '../../../core/utils/secure-storage.util';
+import { environment } from '../../../../environments/environment';
 
 const AUTH_STORAGE_KEY = environment.tokenKey;
 const REFRESH_STORAGE_KEY = environment.refreshTokenKey;

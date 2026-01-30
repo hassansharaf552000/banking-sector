@@ -6,11 +6,11 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { DividerModule } from 'primeng/divider';
-import { Customer, Account } from '../../../core/models';
-import { CustomerService } from '../../../core/services/customer.service';
-import { AccountService } from '../../../core/services/account.service';
-import { StateService } from '../../../core/services/state.service';
-import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+import { Customer, Account } from '../../../../core/models';
+import { CustomerService } from '../../services/customer.service';
+import { AccountService } from '../../services/account.service';
+import { StateService } from '../../../../core/services/state.service';
+import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-customer-details',

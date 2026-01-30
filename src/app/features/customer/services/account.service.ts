@@ -1,8 +1,8 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, shareReplay, map } from 'rxjs';
-import { Account } from '../models';
-import { SecureStorage } from '../utils/secure-storage.util';
+import { Account } from '../../../core/models';
+import { SecureStorage } from '../../../core/utils/secure-storage.util';
 
 const ACCOUNTS_STORAGE_KEY = 'accounts_data';
 

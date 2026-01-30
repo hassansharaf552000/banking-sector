@@ -14,17 +14,17 @@ import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
-import { Transaction, Account, TransactionType } from '../../../core/models';
-import { TransactionService } from '../../../core/services/transaction.service';
-import { AccountService } from '../../../core/services/account.service';
+import { Transaction, Account, TransactionType } from '../../../../core/models';
+import { TransactionService } from '../../services/transaction.service';
+import { AccountService } from '../../../customer/services/account.service';
 import {
   maxDecimalPlaces,
   notFutureDate,
   amountRange,
   merchantLength,
   balanceValidator,
-} from '../../../shared/validators/custom-validators';
-import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+} from '../../../../shared/validators/custom-validators';
+import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-transactions-list',

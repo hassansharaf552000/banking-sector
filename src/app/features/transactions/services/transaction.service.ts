@@ -1,9 +1,9 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, shareReplay, map } from 'rxjs';
-import { Transaction, CreateTransactionDto, TransactionType } from '../models';
-import { SecureStorage } from '../utils/secure-storage.util';
-import { AccountService } from './account.service';
+import { Transaction, CreateTransactionDto, TransactionType } from '../../../core/models';
+import { SecureStorage } from '../../../core/utils/secure-storage.util';
+import { AccountService } from '../../customer/services/account.service';
 
 const TRANSACTIONS_STORAGE_KEY = 'transactions_data';
 

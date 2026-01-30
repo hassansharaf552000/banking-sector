@@ -10,18 +10,18 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('./features/auth/login/login.component').then((m) => m.LoginComponent),
+      import('./features/auth/components/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'dashboard',
     loadComponent: () =>
-      import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+      import('./features/dashboard/components/dashboard/dashboard.component').then((m) => m.DashboardComponent),
     canActivate: [authGuard],
   },
   {
     path: 'customer/:cif',
     loadComponent: () =>
-      import('./features/customer/customer-details/customer-details.component').then(
+      import('./features/customer/components/customer-details/customer-details.component').then(
         (m) => m.CustomerDetailsComponent
       ),
     canActivate: [authGuard],
@@ -29,7 +29,7 @@ export const routes: Routes = [
   {
     path: 'customer/:cif/account/:accountId/transactions',
     loadComponent: () =>
-      import('./features/transactions/transactions-list/transactions-list.component').then(
+      import('./features/transactions/components/transactions-list/transactions-list.component').then(
         (m) => m.TransactionsListComponent
       ),
     canActivate: [authGuard],
